@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Restaurante</title>
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>styles.css">
+  <link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body>

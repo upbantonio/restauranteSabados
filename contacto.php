@@ -1,5 +1,7 @@
 <?php
-include 'include/templates/header.php'
+require  'include/funciones.php';
+incluirTemplates('header');
+// include 'include/templates/header.php'
 ?>
 
     <section class="contacto container" id="contacto">

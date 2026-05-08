@@ -1,8 +1,8 @@
 <?php
-// require  'include/funciones.php';
-// incluirTemplates('header');
+require  'include/funciones.php';
+incluirTemplates('header');
 
-include 'include/templates/header.php'
+// include 'include/templates/header.php'
 
 ?>
 
@@ -73,7 +73,8 @@ include 'include/templates/header.php'
   </section>
 
 <?php
-include 'include/templates/footer.php'
+incluirTemplates('footer');
+// |include 'include/templates/footer.php'
 ?>
 
   
