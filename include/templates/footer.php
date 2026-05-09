@@ -28,9 +28,12 @@
     </div>
   </footer>
 
-  <script src="">JS/appIndex.js</script>
+  <?php if(isset($scripts) && is_array($scripts)): ?>
+    <?php foreach($scripts as $script): ?>
+        <script src="<?php echo BASE_URL . "assets/js/$script.js"; ?>"></script>
+    <?php endforeach; ?>
+<?php endif; ?>
 
 </body>
-
-
 </html>
+

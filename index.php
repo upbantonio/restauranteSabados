@@ -1,4 +1,5 @@
 <?php
+$scripts = ['app']; // JS global
 require  'include/funciones.php';
 incluirTemplates('header');
 

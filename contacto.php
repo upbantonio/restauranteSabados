@@ -1,5 +1,7 @@
 <?php
-include 'include/templates/header.php'
+$scripts = ['app', 'contacto']; // global + específico
+require  'include/funciones.php';
+incluirTemplates('header');
 ?>
 
     <section class="contacto container" id="contacto">
