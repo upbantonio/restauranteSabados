@@ -1,4 +1,5 @@
 <?php
+$scripts = ['app', 'contacto']; // global + específico
 require  'include/funciones.php';
 incluirTemplates('header');
 // include 'include/templates/header.php'

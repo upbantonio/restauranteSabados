@@ -7,4 +7,6 @@ function incluirTemplates($nombre): void {
     include  __DIR__ ."/templates/$nombre.php";
 }
 
+
+
 define('BASE_URL', '/restauranteSabados/');

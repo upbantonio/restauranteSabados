@@ -1,4 +1,5 @@
 <?php
+$scripts = ['app']; // JS global
 require  'include/funciones.php';
 incluirTemplates('header');
 
@@ -73,8 +74,8 @@ incluirTemplates('header');
   </section>
 
 <?php
-incluirTemplates('footer');
-// |include 'include/templates/footer.php'
+// incluirTemplates('footer');
+include 'include/templates/footer.php'
 ?>
 
   
