@@ -1,8 +1,8 @@
 <?php
-// require  'include/funciones.php';
-// incluirTemplates('header');
+require  'include/funciones.php';
+incluirTemplates('header');
 
-include 'include/templates/header.php'
+// include 'include/templates/header.php'
 
 ?>
 
@@ -23,7 +23,7 @@ include 'include/templates/header.php'
     <div class="cards">
 
       <div class="card">
-        <img src="img/image3.svg" alt="plato3">
+        <img src="assets/imagenes/img/image3.svg" alt="plato3">
         <div class="card-body">
           <h3>Bandeja Paisa</h3>
           <p>Plato tradicional colombiano lleno de sabor.</p>
@@ -32,7 +32,7 @@ include 'include/templates/header.php'
       </div>
 
       <div class="card">
-        <img src="img/image4.svg" alt="plato4">
+        <img src="assets/imagenes/img/image4.svg" alt="plato4">
         <div class="card-body">
           <h3>Sancocho</h3>
           <p>Sopa casera perfecta para compartir en familia.</p>
@@ -41,7 +41,7 @@ include 'include/templates/header.php'
       </div>
 
       <div class="card">
-        <img src="img/image5.svg" alt="plato5">
+        <img src="assets/imagenes/img/image5.svg" alt="plato5">
         <div class="card-body">
           <h3>Arroz con Pollo</h3>
           <p>Clásico arroz con pollo al estilo casero.</p>
@@ -56,18 +56,18 @@ include 'include/templates/header.php'
     <h2>Galería</h2>
 
     <div class="grid-galeria">
-      <img src="img/image6.svg" alt="plato1">
-      <img src="img/image7.svg" alt="plato1">
-      <img src="img/image8.svg" alt="plato1">
-      <img src="img/image9.svg" alt="plato1">
-      <img src="img/image10.svg" alt="plato1">
-      <img src="img/image11.svg" alt="plato1">
-      <img src="img/image12.svg" alt="plato1">
-      <img src="img/image13.svg" alt="plato1">
-      <img src="img/image14.svg" alt="plato1">
-      <img src="img/image15.svg" alt="plato1">
-      <img src="img/image16.svg" alt="plato1">
-      <img src="img/image17.svg" alt="plato1">
+      <img src="assets/imagenes/img/image6.svg" alt="plato1">
+      <img src="assets/imagenes/img/image7.svg" alt="plato1">
+      <img src="assets/imagenes/img/image8.svg" alt="plato1">
+      <img src="assets/imagenes/img/image9.svg" alt="plato1">
+      <img src="assets/imagenes/img/image10.svg" alt="plato1">
+      <img src="assets/imagenes/img/image11.svg" alt="plato1">
+      <img src="assets/imagenes/img/image12.svg" alt="plato1">
+      <img src="assets/imagenes/img/image13.svg" alt="plato1">
+      <img src="assets/imagenes/img/image14.svg" alt="plato1">
+      <img src="assets/imagenes/img/image15.svg" alt="plato1">
+      <img src="assets/imagenes/img/image16.svg" alt="plato1">
+      <img src="assets/imagenes/img/image17.svg" alt="plato1">
 
     </div>
   </section>

@@ -1,0 +1,35 @@
+/* FOOTER */
+.footer {
+  margin-top: 60px;
+  background: #111;
+  color: white;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 20px;
+}
+
+.footer-content h3,
+.footer-content h4 {
+  margin-bottom: 10px;
+}
+
+.footer-content a {
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  margin-bottom: 5px;
+}
+
+.footer-content a:hover {
+  color: #ff9800;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 15px;
+  background: #000;
+  font-size: 14px;
+}
