@@ -5,7 +5,14 @@
   <meta charset="UTF-8">
   <title>Restaurante</title>
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>styles.css">
+
+  <!-- DataTables  -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+
 </head>
+
 
 <body>
 

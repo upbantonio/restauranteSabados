@@ -1,0 +1,31 @@
+{
+    "intelephense.environment.phpVersion": "8.2",
+
+    "intelephense.files.maxSize": 5000000,
+    "intelephense.files.exclude": [
+        "**/vendor/**",
+        "**/node_modules/**"
+    ],
+
+    "intelephense.diagnostics.enable": true,
+    "intelephense.diagnostics.undefinedVariables": true,
+
+    "intelephense.completion.insertUseDeclaration": true,
+
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": true
+    },
+
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.tabCompletion": "on",
+
+    "files.associations": {
+        "*.php": "php"
+    },
+
+    "path-intellisense.mappings": {
+        "@": "${workspaceRoot}"
+    }
+}

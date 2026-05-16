@@ -1,74 +1,72 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const inputImagen = document.getElementById("imagen");
+
+    const form = document.querySelector(".admin-form");
     const preview = document.getElementById("preview");
-    const formulario = document.querySelector(".admin-form");
 
-    // Preview de imagen
-    inputImagen.addEventListener("change", (e) => {
+       // LIMPIAR URL
+    if (window.location.search.includes("ok=1")) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    // PREVIEW
+    document.querySelector('[name="imagen"]').addEventListener("change", e => {
         const file = e.target.files[0];
-
         if (file) {
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                preview.src = e.target.result;
-                preview.style.display = "block";
-            };
-
-            reader.readAsDataURL(file);
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = "block";
         }
     });
 
-    // Validación + mensaje
-    formulario.addEventListener("submit", (e) => {
-        // e.preventDefault();
+    // VALIDACIÓN FRONTEND
+    form.addEventListener("submit", (e) => {
 
-        const nombre = document.getElementById("nombre").value.trim();
-        const descripcion = document.getElementById("descripcion").value.trim();
-        const precio = document.getElementById("precio").value;
+        let errores = false;
 
-        if (!nombre || !descripcion || !precio) {
-            mostrarError("Todos los campos son obligatorios", formulario);
-            return;
+        limpiarErrores();
+
+        const nombre = form.nombre.value.trim();
+        const descripcion = form.descripcion.value.trim();
+        const precio = form.precio.value;
+
+        if (!nombre) {
+            mostrarError("nombre", "Campo obligatorio");
+            errores = true;
         }
 
-        if (precio <= 0) {
-            mostrarError("El precio debe ser mayor a 0", formulario);
-            return;
+        if (!descripcion) {
+            mostrarError("descripcion", "Campo obligatorio");
+            errores = true;
         }
 
-        mostrarMensaje("¡Plato creado con éxito!", formulario);
+        if (precio === "" || precio < 0) {
+            mostrarError("precio", "Precio inválido");
+            errores = true;
+        }
 
-      
+        if (!form.imagen.files.length) {
+            mostrarError("imagen", "Imagen obligatoria");
+            errores = true;
+        }
+
+        if (errores) e.preventDefault();
     });
 
-    // Funciones
-    function mostrarError(mensaje, formulario) {
-        limpiarMensajes(formulario); 
-
-        const error = document.createElement('p');
+    function mostrarError(inputName, mensaje) {
+        const input = document.querySelector(`[name="${inputName}"]`);
+        const error = document.createElement("p");
         error.textContent = mensaje;
-        error.classList.add('error');
-
-        formulario.appendChild(error);
-
-        setTimeout(() => error.remove(), 2000);
+        error.classList.add("error");
+        input.insertAdjacentElement("afterend", error);
     }
 
-    function mostrarMensaje(mensaje, formulario) {
-        limpiarMensajes(formulario); 
-
-        const ok = document.createElement('p');
-        ok.textContent = mensaje;
-        ok.classList.add('mensajeOk');
-
-        formulario.appendChild(ok);
-
-        setTimeout(() => ok.remove(), 2000);
+    function limpiarErrores() {
+        document.querySelectorAll(".error").forEach(e => e.remove());
     }
 
-    function limpiarMensajes(formulario) {
-        const mensajes = formulario.querySelectorAll('.error, .mensajeOk');
-        mensajes.forEach(m => m.remove());
+    // MENSAJE DESAPARECE
+    const msg = document.getElementById("mensajeOk");
+    if (msg) {
+        setTimeout(() => msg.remove(), 3000);
     }
+
 });

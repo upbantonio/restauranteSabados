@@ -1,13 +1,12 @@
-<?php
+<?php 
 
-mysqli_report(MYSQLI_REPORT_OFF);
+function conectarDB(): mysqli {
+    $db = new mysqli("localhost", "root", "", "restaurante_db");
 
-function conectarDB() {
-    $bd = mysqli_connect('localhost', 'root', '', 'restaurante_admin');
-
-    if (!$bd) {
-        die("Error de conexión: " . mysqli_connect_error());
+    if ($db->connect_error) {
+        echo "Error de conexión: " . $db->connect_error;
+        exit;
     }
 
-    return $bd;
+    return $db;
 }

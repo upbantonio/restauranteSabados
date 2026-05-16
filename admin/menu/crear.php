@@ -1,114 +1,135 @@
 <?php
-require __DIR__ .'/../../include/config/database.php';
+$scripts = ['app', 'crear']; // global + específico
 
+require __DIR__ . '/../../include/config/database.php';
 $db = conectarDB();
 
-// echo "✅ Conectado correctamente";
-// exit;
-
-
+$errores = [];
 $mensaje = '';
+
+// PRG (mensaje después de redirect)
+if (isset($_GET['ok'])) {
+    $mensaje = "✅ Plato creado con éxito";
+}
+
+// Valores por defecto
+$nombre = '';
+$descripcion = '';
+$precio = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Sanitizar datos
-    $nombre = mysqli_real_escape_string($db, $_POST['nombre']);
-    $descripcion = mysqli_real_escape_string($db, $_POST['descripcion']);
+    // Sanitizar (básico)
+    $nombre = trim($_POST['nombre']);
+    $descripcion = trim($_POST['descripcion']);
     $precio = floatval($_POST['precio']);
-
-    // Imagen
     $imagen = $_FILES['imagen'];
 
-    // Validación básica
-    if (!$nombre || !$descripcion || $precio <= 0) {
-        $mensaje = "Todos los campos son obligatorios";
-    } else {
+    // VALIDACIONES BACKEND
+    if (!$nombre) {
+        $errores['nombre'] = "El nombre es obligatorio";
+    }
 
-        // Ruta física (servidor)
-        $carpetaImagenes = $_SERVER['DOCUMENT_ROOT'] . '/restauranteSabados/assets/imagenes/platos/';
+    if (!$descripcion) {
+        $errores['descripcion'] = "La descripción es obligatoria";
+    }
 
-        // Crear carpeta si no existe
-        if (!is_dir($carpetaImagenes)) {
-            mkdir($carpetaImagenes, 0755, true);
+    if (!is_numeric($precio) || $precio < 0) {
+        $errores['precio'] = "Precio inválido";
+    }
+
+    if (!$imagen['tmp_name']) {
+        $errores['imagen'] = "La imagen es obligatoria";
+    }
+
+    // Si no hay errores
+    if (empty($errores)) {
+
+        $carpeta = $_SERVER['DOCUMENT_ROOT'] . '/restauranteSabados/assets/imagenes/platos/';
+        if (!is_dir($carpeta)) {
+            mkdir($carpeta, 0755, true);
         }
 
-        // Obtener extensión real
         $extension = strtolower(pathinfo($imagen['name'], PATHINFO_EXTENSION));
+        $permitidos = ['jpg','jpeg','png','webp','avif'];
 
-        // Validar tipo de imagen
-        $tiposPermitidos = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
-
-        if (!in_array($extension, $tiposPermitidos)) {
-            $mensaje = "Formato de imagen no permitido";
+        if (!in_array($extension, $permitidos)) {
+            $errores['imagen'] = "Formato no válido";
+        } elseif ($imagen['size'] > 2000000) {
+            $errores['imagen'] = "Máximo 2MB";
         } else {
 
-            // Generar nombre único seguro
-            do {
-                $nombreImagen = md5(uniqid(rand(), true)) . "." . $extension;
-                $rutaCompleta = $carpetaImagenes . $nombreImagen;
-            } while (file_exists($rutaCompleta));
+            $nombreImagen = md5(uniqid(rand(), true)) . "." . $extension;
+            $ruta = $carpeta . $nombreImagen;
 
-            // Subir imagen
-            if (move_uploaded_file($imagen['tmp_name'], $rutaCompleta)) {
+            if (move_uploaded_file($imagen['tmp_name'], $ruta)) {
 
-                // Ruta que se guarda en BD
                 $rutaDB = 'assets/imagenes/platos/' . $nombreImagen;
 
-                // INSERT
-                $query = "INSERT INTO platos 
-                    (nombre, descripcion, precio, imagen, activo, orden)
-                    VALUES ('$nombre', '$descripcion', '$precio', '$rutaDB', 1, 0)";
+                $stmt = $db->prepare("INSERT INTO platos 
+                    (nombre, descripcion, valor, imagen, activo, orden) 
+                    VALUES (?, ?, ?, ?, 1, 0)");
 
-                $resultado = mysqli_query($db, $query);
+                $stmt->bind_param("ssds", $nombre, $descripcion, $precio, $rutaDB);
+                $stmt->execute();
 
-                if ($resultado) {
-                    $mensaje = "✅ Plato creado correctamente";
-                } else {
-                    $mensaje = "Error al guardar en BD";
-                }
-
-            } else {
-                $mensaje = "Error al subir la imagen";
+                // REDIRECT (evita duplicados)
+                header("Location: crear.php?ok=1");
+                exit;
             }
         }
     }
 }
-$scripts = ['app', 'crear']; // global + específico
-require  '../../include/funciones.php';
-incluirTemplates('header');
 
+require '../../include/funciones.php';
+incluirTemplates('header');
 ?>
 
 <body>
-    <section class="admin-container admin-container-admin">
-        
-        <main class="admin-card">
-            <h1>Crear Plato</h1>
+<section class="admin-container admin-container-admin">
 
-            <form class="admin-form" method="POST"  enctype="multipart/form-data">
+    <main class="admin-card">
+        <h1>Crear Plato</h1>
 
-                <label for="nombre">Nombre del Plato</label>
-                <input type="text" id="nombre" name="nombre" >
+        <?php if ($mensaje): ?>
+            <p id="mensajeOk" class="mensajeOk"><?php echo $mensaje; ?></p>
+        <?php endif; ?>
 
-                <label for="descripcion">Descripción</label>
-                <textarea id="descripcion" name="descripcion" ></textarea>
+        <form class="admin-form" method="POST" enctype="multipart/form-data" novalidate>
 
-                <label for="precio">Precio</label>
-                <input type="number" id="precio" name="precio" >
+            <!-- NOMBRE -->
+            <label>Nombre</label>
+            <input type="text" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>">
+            <?php if (isset($errores['nombre'])): ?>
+                <p class="error"><?php echo $errores['nombre']; ?></p>
+            <?php endif; ?>
 
-                <label for="imagen">Imagen</label>
-                <input type="file" id="imagen" name="imagen" accept="image/jpg, image/png, image/avif, image/webp" required>
+            <!-- DESCRIPCIÓN -->
+            <label>Descripción</label>
+            <textarea name="descripcion"><?php echo htmlspecialchars($descripcion); ?></textarea>
+            <?php if (isset($errores['descripcion'])): ?>
+                <p class="error"><?php echo $errores['descripcion']; ?></p>
+            <?php endif; ?>
 
-                <img id="preview" class="admin-preview">
+            <!-- PRECIO -->
+            <label>Precio</label>
+            <input type="number" name="precio"  min="0" value="<?php echo $precio; ?>">
+            <?php if (isset($errores['precio'])): ?>
+                <p class="error"><?php echo $errores['precio']; ?></p>
+            <?php endif; ?>
 
-                <input type="submit" value="Crear Plato" class="admin-btn">
+            <!-- IMAGEN -->
+            <label>Imagen</label>
+            <input type="file" name="imagen" accept="image/jpeg, image/png, image/webp, image/avif">
+            <?php if (isset($errores['imagen'])): ?>
+                <p class="error"><?php echo $errores['imagen']; ?></p>
+            <?php endif; ?>
 
-            </form>
-        </main>
+            <img id="preview" style="max-width:200px; display:none;">
 
-    </section>
+            <input type="submit" value="Crear Plato" class="admin-btn">
+        </form>
+    </main>
+</section>
 
-
-<?php
-include '../../include/templates/footer.php'
-?>
+<?php include '../../include/templates/footer.php'; ?>
