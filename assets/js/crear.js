@@ -1,75 +1,145 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const inputImagen = document.getElementById("imagen");
-    const preview = document.getElementById("preview");
-    const formulario = document.querySelector(".admin-form");
+document.addEventListener("DOMContentLoaded", () => { 
 
-    // Preview de imagen
-    inputImagen.addEventListener("change", (e) => {
-        const file = e.target.files[0];
+  
 
-        if (file) {
-            const reader = new FileReader();
+    const form = document.querySelector(".admin-form"); 
 
-            reader.onload = function (e) {
-                preview.src = e.target.result;
-                preview.style.display = "block";
-            };
+    const preview = document.getElementById("preview"); 
 
-            reader.readAsDataURL(file);
-        }
-    });
+  
 
-    // Validación + mensaje
-    formulario.addEventListener("submit", (e) => {
-         e.preventDefault();
+       // LIMPIAR URL 
 
-        const nombre = document.getElementById("nombre").value.trim();
-        const descripcion = document.getElementById("descripcion").value.trim();
-        const precio = document.getElementById("precio").value;
+    if (window.location.search.includes("ok=1")) { 
 
-        if (!nombre || !descripcion || !precio) {
-            mostrarError("Todos los campos son obligatorios", formulario);
-            return;
-        }
+        window.history.replaceState({}, document.title, window.location.pathname); 
 
-        if (precio <= 0) {
-            mostrarError("El precio debe ser mayor a 0", formulario);
-            return;
-        }
+    } 
 
-        mostrarMensaje("¡Plato creado con éxito!", formulario);
+  
 
-      
-    });
+    // PREVIEW 
 
-    // Funciones
-    function mostrarError(mensaje, formulario) {
-        limpiarMensajes(formulario); 
+    document.querySelector('[name="imagen"]').addEventListener("change", e => { 
 
-        const error = document.createElement('p');
-        error.textContent = mensaje;
-        error.classList.add('error');
+        const file = e.target.files[0]; 
 
-        formulario.appendChild(error);
+        if (file) { 
 
-        setTimeout(() => error.remove(), 2000);
-    }
+            preview.src = URL.createObjectURL(file); 
 
-    function mostrarMensaje(mensaje, formulario) {
-        limpiarMensajes(formulario); 
+            preview.style.display = "block"; 
 
-        const ok = document.createElement('p');
-        ok.textContent = mensaje;
-        ok.classList.add('mensajeOk');
+        } 
 
-        formulario.appendChild(ok);
+    }); 
 
-        setTimeout(() => ok.remove(), 2000);
-    }
+  
 
-    function limpiarMensajes(formulario) {
-        const mensajes = formulario.querySelectorAll('.error, .mensajeOk');
-        mensajes.forEach(m => m.remove());
-    }
-});
+    // VALIDACIÓN FRONTEND 
 
+    form.addEventListener("submit", (e) => { 
+
+  
+
+        let errores = false; 
+
+  
+
+        limpiarErrores(); 
+
+  
+
+        const nombre = form.nombre.value.trim(); 
+
+        const descripcion = form.descripcion.value.trim(); 
+
+        const precio = form.precio.value; 
+
+  
+
+        if (!nombre) { 
+
+            mostrarError("nombre", "Campo obligatorio"); 
+
+            errores = true; 
+
+        } 
+
+  
+
+        if (!descripcion) { 
+
+            mostrarError("descripcion", "Campo obligatorio"); 
+
+            errores = true; 
+
+        } 
+
+  
+
+        if (precio === "" || precio < 0) { 
+
+            mostrarError("precio", "Precio inválido"); 
+
+            errores = true; 
+
+        } 
+
+  
+
+        if (!form.imagen.files.length) { 
+
+            mostrarError("imagen", "Imagen obligatoria"); 
+
+            errores = true; 
+
+        } 
+
+  
+
+        if (errores) e.preventDefault(); 
+
+    }); 
+
+  
+
+    function mostrarError(inputName, mensaje) { 
+
+        const input = document.querySelector(`[name="${inputName}"]`); 
+
+        const error = document.createElement("p"); 
+
+        error.textContent = mensaje; 
+
+        error.classList.add("error"); 
+
+        input.insertAdjacentElement("afterend", error); 
+
+    } 
+
+  
+
+    function limpiarErrores() { 
+
+        document.querySelectorAll(".error").forEach(e => e.remove()); 
+
+    } 
+
+  
+
+    // MENSAJE DESAPARECE 
+
+    const msg = document.getElementById("mensajeOk"); 
+
+    if (msg) { 
+
+        setTimeout(() => msg.remove(), 3000); 
+
+    } 
+
+  
+
+}); 
+
+ 

@@ -18,6 +18,7 @@
         <a href="<?php echo BASE_URL;?>index.php#menu">Menú</a>
         <a href="<?php echo BASE_URL;?>index.php#galeria">Galeria</a>
         <a href="<?php echo BASE_URL;?>contacto.php">Contacto</a>
+        <a href="<?php echo BASE_URL;?>admin/index.php">Administrador</a>
       </nav>
     </div>
   </header>
